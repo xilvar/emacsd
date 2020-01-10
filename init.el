@@ -15,6 +15,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (tango-dark)))
+ '(inhibit-startup-screen t)
  '(package-selected-packages nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -23,12 +25,15 @@
  ;; If there is more than one, they won't work right.
  )
 
-;; fix temp/backup files
+;; fix auto-save/backup files
 (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; disable auto-save/backup
+(setq auto-save-default nil)
+(setq make-backup-files nil)
 
 ;; remove whitespace
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -39,11 +44,23 @@
   (setq-default flycheck-flake8-maximum-line-length 79)
   )
 
+; (when (fboundp 'electric-indent-mode) (electric-indent-mode -1))
+
 ;; disable tabs
 (setq-default indent-tabs-mode nil)
-(setq tab-width 4)
+(setq-default tab-width 4)
 (defvaralias 'c-basic-offset 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
+
+;; Text-mode
+(add-hook 'text-mode-hook
+          '(lambda ()
+             (setq indent-tabs-mode nil)
+             (setq tab-width 4)
+
+             ))
+;; (setq indent-line-function (quote insert-tab))
+;; (electric-indent-mode -1)
 
 ;; Tide-mode setup
 (defun setup-tide-mode ()
